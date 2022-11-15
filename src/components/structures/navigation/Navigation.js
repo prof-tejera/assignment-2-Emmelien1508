@@ -7,10 +7,11 @@ export default function Navigation() {
     return (
         <div>
             <ul className='navigation-menu'>
-                <li><Link to='/assignment-2-Emmelien1508/stopwatch'>Stopwatch</Link></li>
-                <li><Link to='/assignment-2-Emmelien1508/countdown'>Countdown</Link></li>
-                <li><Link to='/assignment-2-Emmelien1508/xy'>XY</Link></li>
-                <li><Link to='/assignment-2-Emmelien1508/tabata'>Tabata</Link></li>
+                <li><Link to='/'>Documentation</Link></li>
+                <li><Link to='/stopwatch'>Stopwatch</Link></li>
+                <li><Link to='/countdown'>Countdown</Link></li>
+                <li><Link to='/xy'>XY</Link></li>
+                <li><Link to='/tabata'>Tabata</Link></li>
             </ul>
         </div>
     )

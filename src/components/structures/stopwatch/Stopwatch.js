@@ -1,4 +1,4 @@
-import Clock from '../clock/Clock'
+import Clock from '../../organisms/clock/Clock'
 
 import './Stopwatch.css'
 
@@ -6,7 +6,7 @@ import './Stopwatch.css'
 export default function Stopwatch() {
     return (
         <Clock 
-            type='stopwatch'
+            countdown={false}
         />
     )
 }

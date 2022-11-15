@@ -1,5 +1,4 @@
 import Button from '../../atoms/button/Button'
-import ControlButtons from '../../molecules/control-buttons/ControlButtons'
 import RoundChooser from '../../molecules/round-chooser/RoundChooser'
 import TimeChooser from '../../molecules/time-chooser/TimeChooser'
 import TimePanel from '../../molecules/time-panel/TimePanel'
@@ -49,13 +48,6 @@ export default function Documentation(props) {
                         <th>Component</th>
                         <th>Description</th>
                         <th>The thing</th>
-                    </tr>
-                    <tr className='light-border'>
-                        <td>Control Buttons</td>
-                        <td>These buttons are used to control the timer</td>
-                        <td>
-                            <ControlButtons/>
-                        </td>
                     </tr>
 
                     <tr className='light-border'>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import ControlButtons from '../../molecules/control-buttons/ControlButtons'
+import ControlButtons from '../../molecules/stopwatch-buttons/StopwatchButtons'
 import TimePanel from '../../molecules/time-panel/TimePanel'
 
 import './Clock.css'
@@ -16,7 +16,11 @@ export default function Clock(props) {
 
         if (isActive && !isPaused) {
             interval = setInterval(() => {
-                setTime((time) => time + 10)
+                if (props.countdown) {
+                    setTime((time) => time - 10)
+                } else {
+                    setTime((time) => time + 10)   
+                }
             }, 10)
         } else {
             clearInterval(interval)
@@ -26,7 +30,7 @@ export default function Clock(props) {
             clearInterval(interval)
         }
 
-    }, [isActive, isPaused])
+    }, [isActive, isPaused, props.countdown])
 
     function handleStart() {
         setIsActive(true)
@@ -49,7 +53,7 @@ export default function Clock(props) {
                     <TimePanel time={time} />
                 </div>
                 <ControlButtons
-                    type={props.type}
+                    countdown={props.countdown}
                     active={isActive}
                     paused={isPaused}
                     handleStart={handleStart}
