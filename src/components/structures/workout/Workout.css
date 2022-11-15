@@ -1,0 +1,43 @@
+.workout {
+    background-color: var(--color-gray2);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-flow: row nowrap;
+    background-color: var(--color-gray2);
+    overflow-y: scroll;
+    padding: 25px;
+    width: 100%;
+    position: relative;
+}
+
+.workout-instructions,
+.workout-placeholder {
+    background-color: var(--black);
+    color: var(--white);
+    padding: 2vw;
+    border-radius: 15px;
+    height: 100%;
+}
+
+.workout-instructions {
+    width: 20vw;
+}
+
+.workout-placeholder {
+    width: 100%;
+    margin-left: 25px;
+}
+
+.add-workout {
+    background-color: var(--color-gray4);
+    color: var(--black);
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+}

@@ -43,18 +43,23 @@ code {
 
 .container {
     background: var(--white);
-    max-height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     overflow: auto;
     overflow: hidden;
+    position: relative;
 }
 
 .container > div:first-child {
     height: 12.5vh;
 }
 
-.container > div:last-child {
+.container > div:nth-child(2) {
     height: 87.5vh;
+}
+
+.container > div:last-child {
+    height: 100vh;
 }
 
 .text-xs {

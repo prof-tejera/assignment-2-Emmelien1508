@@ -1,4 +1,5 @@
 import Button from '../../atoms/button/Button'
+import ControlButtons from '../../molecules/control-buttons/ControlButtons'
 import RoundChooser from '../../molecules/round-chooser/RoundChooser'
 import TimeChooser from '../../molecules/time-chooser/TimeChooser'
 import TimePanel from '../../molecules/time-panel/TimePanel'
@@ -27,52 +28,67 @@ export default function Documentation(props) {
             <div className='documentation-atoms'>
                 <h1>Atoms</h1>
                 <table>
-                    <tr className='dark-border'>
-                        <th>Component</th>
-                        <th>Description</th>
-                        <th>The thing</th>
-                    </tr>
-                    <tr>
-                        <td>Button</td>
-                        <td>This is a button</td>
-                        <td>
-                            <Button classes='small start'>Start</Button>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr className='dark-border'>
+                            <th>Component</th>
+                            <th>Description</th>
+                            <th>The thing</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <tr>
+                            <td>Button</td>
+                            <td>This is a button</td>
+                            <td>
+                                <Button classes='small start'>Start</Button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div> 
             <div className='documentation-molecules'>
                 <h1>Molecules</h1>
                 <table>
-                    <tr className='dark-border'>
-                        <th>Component</th>
-                        <th>Description</th>
-                        <th>The thing</th>
-                    </tr>
+                    <thead>
+                        <tr className='dark-border'>
+                            <th>Component</th>
+                            <th>Description</th>
+                            <th>The thing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr className='light-border'>
+                            <td>Control Buttons</td>
+                            <td>These buttons are used to control the timer</td>
+                            <td>
+                                <ControlButtons/>
+                            </td>
+                        </tr>
 
-                    <tr className='light-border'>
-                        <td>Round Chooser</td>
-                        <td>This element is used to choose the number of rounds</td>
-                        <td>
-                            <RoundChooser totalRounds="5"/>
-                        </td>
-                    </tr>
+                        <tr className='light-border'>
+                            <td>Round Chooser</td>
+                            <td>This element is used to choose the number of rounds</td>
+                            <td>
+                                <RoundChooser totalRounds="5"/>
+                            </td>
+                        </tr>
 
-                    <tr className='light-border'>
-                        <td>Time Chooser</td>
-                        <td>This element is used to choose the time for the countdown</td>
-                        <td>
-                            <TimeChooser minutes={1} seconds={0}/>
-                        </td>
-                    </tr>
+                        <tr className='light-border'>
+                            <td>Time Chooser</td>
+                            <td>This element is used to choose the time for the countdown</td>
+                            <td>
+                                <TimeChooser minutes={1} seconds={0}/>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>Time Panel</td>
-                        <td>This element is used for the display of how much time is left</td>
-                        <td>
-                            <TimePanel time={60000}/>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>Time Panel</td>
+                            <td>This element is used for the display of how much time is left</td>
+                            <td>
+                                <TimePanel time={60000}/>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
