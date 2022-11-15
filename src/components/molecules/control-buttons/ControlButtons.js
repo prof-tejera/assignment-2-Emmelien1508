@@ -4,7 +4,7 @@ import './ControlButtons.css'
 
 
 export default function ControlButtons(props) {
-    if (props.stopwatch) {
+    if (props.type === 'stopwatch') {
         const activeButtons = (
             <div>
                 <Button classes="reset" onClick={props.handleReset}>
@@ -44,7 +44,7 @@ export default function ControlButtons(props) {
             </div>
         )
 
-        const readyButtons = (
+        const nonActiveButtons = (
             <div>
                 <Button classes="reset" onClick={props.handleClear}>
                     Clear
@@ -66,9 +66,11 @@ export default function ControlButtons(props) {
             </div>
         )
 
+        const readyButtons = props.active ? activeButtons : nonActiveButtons
+
         return (
             <div className="control-buttons">
-                {props.ready ? (props.active ? activeButtons : readyButtons) : initialButtons}
+                {props.ready ? readyButtons : initialButtons}
             </div>
         )
     }
