@@ -1,0 +1,16 @@
+.workout-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+}
+
+.workout-item {
+    min-width: 50px;
+    min-height: 80px;
+    border-radius: 5px;
+    background-color: var(--color-gray2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin: 5px;
+}

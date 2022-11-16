@@ -4,3 +4,8 @@ export function getTime(time) {
     const miliseconds = ((time / 10) % 100)
     return { minutes, seconds, miliseconds }
 }
+
+export function capitalize(str) {
+    const lower = str.toLowerCase()
+    return str.charAt(0).toUpperCase() + lower.slice(1)
+}
