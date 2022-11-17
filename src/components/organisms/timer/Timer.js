@@ -9,13 +9,13 @@ import TimePanel from '../../molecules/time-panel/TimePanel'
 import './Timer.css'
 
 export default function Timer(props) {
-    const [isReady, setIsReady] = useState(false)
-    const [isActive, setIsActive] = useState(false)
-    const [isPaused, setIsPaused] = useState(true)
+    const [isReady, setIsReady] = useState(props.isReady)
+    const [isActive, setIsActive] = useState(props.isActive)
+    const [isPaused, setIsPaused] = useState(props.isPaused)
 
     const [currentRound, setCurrentRound] = useState(1)
-    const [initialRounds, setInitialRounds] = useState(1)
-    const [totalRounds, setTotalRounds] = useState(1)
+    const [initialRounds, setInitialRounds] = useState(props.rounds)
+    const [totalRounds, setTotalRounds] = useState(props.rounds)
 
     const [rest, setRest] = useState(false)
     const [work, setWork] = useState(true)
@@ -25,10 +25,10 @@ export default function Timer(props) {
     const [time, setTime] = useState(props.initialMinutes * 60000 + props.initialSeconds * 1000)
     const [initialTime, setInitialTime] = useState(time)
 
-    const [initialRestTime, setInitialRestTime] = useState(0)
-    const [restMinutes, setRestMinutes] = useState(0)
-    const [restSeconds, setRestSeconds] = useState(3)
-    const [restTime, setRestTime] = useState(0)
+    const [restMinutes, setRestMinutes] = useState(props.initialRestMinutes)
+    const [restSeconds, setRestSeconds] = useState(props.initialRestSeconds)
+    const [restTime, setRestTime] = useState(props.initialRestMinutes * 60000 + props.initialRestSeconds * 1000)
+    const [initialRestTime, setInitialRestTime] = useState(restTime)
 
     useEffect(() => {
         let interval;
@@ -105,28 +105,47 @@ export default function Timer(props) {
     }
     
     function handleSet() {
+        let data = {
+            name: props.name, 
+            minutes: minutes, 
+            seconds: seconds,
+            formattedMinutes: ("0" + minutes).slice(-2),
+            formattedSeconds: ("0" + seconds).slice(-2),
+            countdown: false,
+        }
+
         if (props.countdown) {
             setTime(minutes * 60000 + seconds * 1000)
             setInitialTime(minutes * 60000 + seconds * 1000)
+            data['countdown'] = true
         } else {
             setTime(0)
             setInitialTime(minutes * 60000 + seconds * 1000)
         }
 
         if (props.hasRounds) {
+            data['rounds'] = totalRounds
             setInitialRounds(totalRounds)
         }
 
         if (props.hasRest) {
+            data['restMinutes'] = restMinutes
+            data['restSeconds'] = restSeconds
+            data['formattedRestMinutes'] = ("0" + restMinutes).slice(-2)
+            data['formattedRestSeconds'] = ("0" + restSeconds).slice(-2)
             setRestTime(restMinutes * 60000 + restSeconds * 1000)
             setInitialRestTime(restMinutes * 60000 + restSeconds * 1000)
         }
 
-        if (props.config) {
-            props.setConfigure(false)
+        setIsReady(true)
+
+        if (props.saveTimerInformation) {
+            props.saveTimerInformation(data)
         }
 
-        setIsReady(true)
+        if (props.disableSettingUp) {
+            props.disableSettingUp()
+        }
     }
 
     function handleStart() {
@@ -151,6 +170,10 @@ export default function Timer(props) {
 
         setIsActive(false)
         setIsPaused(true)
+
+        if (props.setFinished) {
+            props.setFinished()
+        }
     }
 
     function incrementMinutes() {
@@ -334,7 +357,7 @@ export default function Timer(props) {
         <div className='timer-wrapper'>
             <div className='countdown'>
                 {isReady ? panel : chooser}
-                {props.config ? configButtons : controlButtons}
+                {props.settingUp ? configButtons : controlButtons}
             </div>
         </div>
     )

@@ -66,3 +66,27 @@
     align-items: center;
     cursor: pointer;
 }
+
+.workout-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+}
+
+.workout-item {
+    min-width: 50px;
+    min-height: 120px;
+    border-radius: 5px;
+    background-color: var(--color-gray2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    padding: 10px;
+    margin: 5px;
+    flex-direction: column;
+}
+
+.workout-item > * {
+    margin-left: auto;
+    margin-right: auto;
+}
