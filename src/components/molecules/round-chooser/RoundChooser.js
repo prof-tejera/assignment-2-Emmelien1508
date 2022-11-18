@@ -5,12 +5,12 @@ import './RoundChooser.css'
 
 export default function RoundChooser(props) {
     return (
-        <div className='round-chooser'>
-            <p className='text-sm'>Select rounds</p>
-            <div>
-                <Button classes="extra-small quantity rounds" onClick={props.decrementRounds}>-</Button>
-                <Button classes="small current-round">{props.totalRounds}</Button>
-                <Button classes="extra-small quantity rounds" onClick={props.incrementRounds}>+</Button>
+        <div className='round-chooser-buttons'>
+            <p>Rounds:</p>
+            <div className="round-chooser">
+                <Button classes="start extra-small" onClick={() => {props.setRounds(props.rounds - 1)}}>-</Button>
+                <span className='round-chooser-value'>{props.rounds}</span>
+                <Button classes="start extra-small" onClick={() => props.setRounds(props.rounds + 1)}>+</Button>
             </div>
         </div>
     )

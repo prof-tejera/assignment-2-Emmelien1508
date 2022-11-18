@@ -1,0 +1,54 @@
+.setter-container {
+    padding: 25px;
+    border-radius: 5px;
+    background-color: var(--color-gray1);
+    margin: 10px 0;
+}
+
+.add-timer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--white);
+}
+
+.back-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 20px;
+}
+
+.back-buttons > * {
+    margin: 0 10px;
+}
+
+.time-chooser,
+.round-chooser {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.time-chooser .time-chooser-value,
+.round-chooser .round-chooser-value {
+    margin: 0 5px;
+}
+
+.timer-chooser-buttons {
+    display: flex;
+    flex-flow: column nowrap;
+    margin-bottom: 10px;
+}
+
+.timer-chooser-buttons > div,
+.round-chooser-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timer-chooser-buttons > div:not(:last-child) {
+    margin-bottom: 10px;
+}

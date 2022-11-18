@@ -22,6 +22,7 @@
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .button.small {

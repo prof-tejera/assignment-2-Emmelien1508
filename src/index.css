@@ -60,7 +60,7 @@ code {
 }
 
 .container > div:last-child {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .text-xs {
@@ -77,33 +77,4 @@ code {
 
 .text-lg {
     font-size: var(--size-lg);
-}
-
-.timer-wrapper {
-    color: var(--white);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.timer-wrapper > div {
-    border-radius: 15px;
-    min-height: 50vh;
-    max-height: 50vw;
-    width: 50vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid var(--color-gray2);
-    border-radius: 10px;
-    background-color: var(--color-gray1);
-}
-
-.time-panel-wrapper {
-    height: 30vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }

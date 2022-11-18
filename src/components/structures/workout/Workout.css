@@ -1,4 +1,4 @@
-.workout {
+/* .workout {
     background-color: var(--color-gray2);
     display: flex;
     align-items: flex-start;
@@ -89,4 +89,37 @@
 .workout-item > * {
     margin-left: auto;
     margin-right: auto;
+} */
+
+
+.workout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.workout-buttons {
+    display: flex;
+    justify-content: center;
+}
+.empty-state,
+.time-total,
+.time-remaining,
+.timer-wrapper,
+.timer {
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-state a {
+    color: var(--color-brown3);
+    text-decoration: none;
+    transition: 300ms ease-in-out;
+}
+
+.empty-state a:hover {
+    color: var(--color-brown2);
 }

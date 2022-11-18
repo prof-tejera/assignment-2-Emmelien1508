@@ -1,240 +1,149 @@
-import { useEffect, useState } from 'react'
-
-import Button from '../../atoms/button/Button'
-import WorkoutItem from '../../organisms/workout-item/WorkoutItem'
-
-import { capitalize } from '../../../utils/helpers'
+import { useNavigate, Link } from "react-router-dom"
+import { useContext, useEffect, useRef } from "react"
+import { TimerContext } from "../../../context/TimerContext"
+import { workoutIsDone, calculateWorkoutTime, getTotalFastForwardTime } from "../../../utils/helpers"
+import Button from "../../atoms/button/Button"
+import TimePanel from "../../molecules/time-panel/TimePanel"
 
 import './Workout.css'
 
-
 export default function Workout() {
-    const [componentToAdd, setComponentToAdd] = useState(null)
-    const [playWorkout, setPlayWorkout] = useState(false)
-    const [queue, setQueue] = useState([])
-    const [workoutList, setWorkoutList] = useState([])
-    const [settingUp, setSettingUp] = useState(true)
-    const [showOptions, setShowOptions] = useState(false)
-    const [showStartButton, setShowStartButton] = useState(false)
-    
-    let workoutItems = [
-        {
-            name: 'stopwatch',
-            component: <WorkoutItem 
-                name="stopwatch"
-                disableSettingUp={disableSettingUp}
-                initialMinutes={1}
-                initialSeconds={0}
-                saveTimerInformation={saveTimerInformation}
-                settingUp={settingUp}
-            />,
-        },
-        {
-            name: 'countdown',
-            component: <WorkoutItem 
-                name="countdown"
-                disableSettingUp={disableSettingUp}
-                initialMinutes={1}
-                initialSeconds={0}
-                saveTimerInformation={saveTimerInformation}
-                settingUp={settingUp}
-            />,
-        },
-        {
-            name: 'xy',
-            component: <WorkoutItem 
-                name="xy"
-                disableSettingUp={disableSettingUp}
-                initialMinutes={1}
-                initialSeconds={0}
-                rounds={3}
-                saveTimerInformation={saveTimerInformation}
-                settingUp={settingUp}
-            />,
-        },
-        {
-            name: 'tabata',
-            component: <WorkoutItem 
-                name="tabata"
-                disableSettingUp={disableSettingUp}
-                initialMinutes={0}
-                initialRestMinutes={0}
-                initialRestSeconds={10}
-                initialSeconds={30}
-                rounds={3}
-                saveTimerInformation={saveTimerInformation}
-                settingUp={settingUp}
-            />,
-        },
-    ]
+    const navigate = useNavigate()
 
-    function saveTimerInformation(data){
-        const workout = workoutItems.find(element => element.name = data.name)
-        for (const [key, value] of Object.entries(data)) {
-            workout[key] = value
-        }
+    const {
+        count,
+        setCount,
+        round,
+        setRound,
+        interval,
+        setInterv,
+        isPaused,
+        setPaused,
+        isStopped,
+        setStopped,
+        activeTimerIndex,
+        setActiveTimerIndex,
+        timers,
+        setTimers,
+        remainingTime,
+        setRemainingTime,
+    } = useContext(TimerContext)
 
-        if (data.name === 'stopwatch') {
-            workout['information'] = <p>Count up to {workout.formattedMinutes}m {workout.formattedSeconds}s</p>
-        } else if (data.name === 'countdown') {
-            workout['information'] = <p>Count down from {workout.formattedMinutes}m {workout.formattedSeconds}s</p>
-        } else if (data.name === 'xy') {
-            workout['information'] = (
-                <div>
-                    <p>Count up to {workout.formattedMinutes}m {workout.formattedSeconds}s</p>
-                    <p>For {workout.rounds} rounds</p>
-                </div>
-            )
-        } else {
-            workout['information'] = (
-                <div>
-                    <p>Work {workout.formattedMinutes}m {workout.formattedSeconds}s & Rest {workout.formattedRestMinutes}m {workout.formattedRestSeconds}s</p>
-                    <p>For {workout.rounds} rounds</p>
-                </div>
-            )
-        }
-        // save information to this workout item
-        setQueue((queue) => [...queue, workout])
-    }
-
-    function disableSettingUp() {
-        setSettingUp(false)
-    }
-
-    function showWorkoutOptions() {
-        setShowOptions(!showOptions)
-    }
-
-    function addWorkout(workout) {
-        // first configure the time and rounds etc.
-        setSettingUp(true)
-        setComponentToAdd(workout.component)
-    }
-
-    function handleWorkoutStart() {
-        setPlayWorkout(true)
-        setSettingUp(false)
-        for (let item of queue) {
-            let thing
-            if (item.restMinutes !== null) {
-                thing = (
-                    <WorkoutItem 
-                        initialMinutes={item.minutes}
-                        initialRestMinutes={item.restMinutes}
-                        initialRestSeconds={item.restSeconds}
-                        initialSeconds={item.seconds}
-                        name={item.name} 
-                        rounds={item.rounds}
-                    />
-                )
-            } else if (item.rounds !== null) {
-                thing = (
-                    <WorkoutItem 
-                        initialMinutes={item.minutes}
-                        initialSeconds={item.seconds}
-                        name={item.name} 
-                        rounds={item.rounds}
-                    />
-                )
-            } else {
-                thing = (
-                    <WorkoutItem 
-                        initialMinutes={item.minutes}
-                        initialSeconds={item.seconds}
-                        name={item.name} 
-                    />
-                )
-            }
-            setWorkoutList((workoutList) => [...workoutList, thing])
-        }
-    }
+    const workoutRunningTime = useRef(0)
 
     useEffect(() => {
-        console.log(workoutList)
-        for (let w of workoutList) {
-            // somehow the activeness is not coming through
-            console.log(w)
-            console.log(w.props)
+        if (isStopped) {
+            workoutRunningTime.current = calculateWorkoutTime(timers)
+            setRemainingTime(workoutRunningTime.current)
         }
-    }, [workoutList])
+    }, [timers, isStopped])
 
-    useEffect(() => {
-        if (queue.length > 0) {
-            setShowStartButton(true)
+    const removeTimer = (index) => {
+        const newTimers = timers.filter((timer, i) => i !== index)
+        setTimers(newTimers)
+    }
+
+    const workoutIsFinished = workoutIsDone(timers)
+    const pauseLabel = isPaused ? "Resume" : "Pause"
+
+    function handleStart() {
+        const newTimers = timers.map((timer, i) => {
+            return { ...timer, isRunning: false, isCompleted: false }
+        })
+        setTimers(newTimers)
+        console.log("these are the new timers")
+        console.log(newTimers)
+        setCount(timers[0].startVal)
+
+        if (timers[0].title === "XY" || timers[0].title === "Tabata") {
+            setRound(timers[0].roundStartVal)
         }
-    }, [queue])
+        if (timers[0].title === "Tabata") {
+            setInterv(timers[0].intervalStartVal)
+        }
 
-    const workoutOptions = (
-        <div className='workout-options'>
-            {
-                workoutItems.map((workout, index) => {
-                    return (
-                        <p key={index} onClick={() => addWorkout(workout)} >
-                            {capitalize(workout.name)}
-                        </p>
-                    )
-                })
+        setActiveTimerIndex(0)
+        setStopped(false)
+        setPaused(false)
+    }
+
+    function handlePause() {
+        setPaused(!isPaused)
+    }
+
+    function handleReset() {
+        const newTimers = timers.map((timer, i) => {
+            return { ...timer, isRunning: false, isCompleted: false }
+            })
+        setTimers(newTimers)
+        setStopped(true)
+        // fix a race condition by setting index out of range
+        setActiveTimerIndex(999)
+    }
+
+    function handleFastForward() {
+        if (!isStopped) {
+            setCount(timers[activeTimerIndex].endVal)
+
+            if (
+                timers[activeTimerIndex].title === "XY" ||
+                timers[activeTimerIndex].title === "Tabata"
+            ) {
+                setRound(timers[activeTimerIndex].roundEndVal)
             }
-        </div>
-    )
+            if (timers[activeTimerIndex].title === "Tabata") {
+                setInterv(timers[activeTimerIndex].intervalEndVal)
+            }
 
-    const displayComponent = componentToAdd
-    const displayGrid = (
-        <div>
-            {showStartButton ? <Button classes="start" onClick={handleWorkoutStart} >Start</Button> : <></>}
-            <div className='workout-grid'>
-                {queue.map((workout, index) => (
-                    <div className="workout-item" key={index}>
-                        <h2>{capitalize(workout.name)}</h2>
-                        {workout.information}
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-
-    const playTimers = (
-        <div>
-            {workoutList.map((workout, index) => (
-                <div className="workout-item" key={index}>
-                    {workout}
-                </div>
-            ))}
-        </div>
-    )
-
-    let workout
-    const options = showOptions ? workoutOptions : <></>
-    const add = playWorkout ? <></> : (
-        <div>
-            <div className='add-workout' onClick={showWorkoutOptions}>
-                <div className='add-workout-button'>
-                    <p>+</p>
-                </div>
-                <h3>Add</h3>
-            </div>
-            {options}
-        </div>
-    )
-
-    if (playWorkout) {
-        workout = playTimers 
-    } else {
-        workout = settingUp ? displayComponent : displayGrid
+            setRemainingTime(
+                workoutRunningTime.current -
+                getTotalFastForwardTime(timers, activeTimerIndex)
+            )
+        }
     }
 
     return (
-        <div className='workout'>
-            <div className='workout-instructions'>
-                <h2>Choose your workout</h2>
-                <div>
-                    <p>Add your first workout!</p>
-                    <p>Here, you can select your workout plan</p>
+        <div className="workout">
+            {timers.length > 0 && (
+                <div className="main-wrap">
+                    <div className="workout-buttons">
+                        {isStopped && <Button classes="start" onClick={() => handleStart()}>Start</Button>}
+                        {!isStopped && <Button classes="pause" onClick={() => handlePause()}>{pauseLabel}</Button>}
+                        <Button classes="start" disabled={isStopped} onClick={() => handleReset()}>Reset</Button>
+                        <Button classes="start" disabled={isStopped} onClick={() => handleFastForward()}>Fast Forward</Button>
+                    </div>
                 </div>
-                {add}
-            </div>
-            <div className='workout-placeholder'>
-                {workout}
+            )}
+            <Button onClick={() => navigate("/docs")} label="Documentation" />
+            {timers.length > 0 && isStopped && <Button classes="start" onClick={() => navigate("/add")}>Add timer</Button>}
+            {timers.length > 0 && isStopped && !workoutIsFinished && (
+                <span className="time-total">
+                    <h2>Total time</h2>
+                    <TimePanel time={calculateWorkoutTime(timers)} />
+                </span>
+            )}
+            {timers.length > 0 && (!isStopped || workoutIsFinished) && (
+                <span className="time-remaining">
+                    <h2>Time remaining</h2>
+                    <TimePanel time={workoutIsFinished ? 0 : remainingTime}/>
+                </span>
+            )}
+            <div>
+                {timers.length === 0 && (
+                    <div className="empty-state">
+                        <h2>No workout configured</h2>
+                        <p>Please <Link to="/add">add one or more timers</Link> to get started</p>
+                    </div>
+                )}
+                {timers.map((timerData, index) => (
+                    <div className={"timer-wrapper " + (index === activeTimerIndex && (!isStopped || workoutIsFinished) ? "active" : "")} key={`wrap-${timerData.title}-${index}`}>
+                        {isStopped && <Button classes="pause" key={`delete-${timerData.title}-${index}`} onClick={() => removeTimer(index)}>X</Button>}
+                        <div className="timer" key={`timer-${timerData.title}-${index}`}>
+                            <h2>{timerData.title}</h2>
+                            <timerData.component {...timerData} isRunning={index === activeTimerIndex} />
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )
