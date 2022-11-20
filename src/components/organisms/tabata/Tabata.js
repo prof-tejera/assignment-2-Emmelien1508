@@ -1,8 +1,8 @@
-import { useEffect, useContext, useRef } from "react";
+import { useEffect, useContext, useRef } from "react"
 
-import { TimerContext } from "../../../context/TimerContext";
-import RoundPanel from "../../molecules/round-panel/RoundPanel";
-import TimePanel from "../../molecules/time-panel/TimePanel";
+import { TimerContext } from "../../../context/TimerContext"
+import RoundPanel from "../../molecules/round-panel/RoundPanel"
+import TimePanel from "../../molecules/time-panel/TimePanel"
 
 import './Tabata.css'
 
@@ -10,7 +10,7 @@ import './Tabata.css'
 export default function Tabata(props) {
     if (!props.isRunning || props.isCompleted) {
         return (
-            <div className="main-panel">
+            <div className="tabata">
                 <TimePanel time={props.isCompleted ? props.endVal : props.startVal} />
                 <TimePanel time={props.isCompleted ? props.intervalEndVal : props.intervalStartVal} />
                 <RoundPanel round={props.isCompleted ? props.roundEndVal : props.roundStartVal} />
@@ -27,7 +27,7 @@ export default function Tabata(props) {
                 intervalStartVal={props.intervalStartVal}
                 intervalEndVal={props.intervalEndVal}
             />
-      );
+      )
 }
 
 function InnerTabata(props) {
@@ -43,56 +43,59 @@ function InnerTabata(props) {
         remainingTime,
         setRemainingTime,
         dispatcher,
-    } = useContext(TimerContext);
-    const posRef = useRef();
-    
+    } = useContext(TimerContext)
+    const posRef = useRef()
+
     useEffect(() => {
-        let time;
+        let time
     
         if (isPaused || isStopped) {
             if (time) {
-                clearTimeout(time);
+                clearTimeout(time)
             }
         }
     
         if (!isPaused && !isStopped) {
             if (count > 0) {
                 time = setTimeout(() => {
-                setCount(count - 10);
-                setRemainingTime(remainingTime - 10);
-                }, 10);
+                    setCount(count - 10)
+                    setRemainingTime(remainingTime - 10)
+                }, 10)
             }
         
             if (count === 0 && interval > 0) {
                 time = setTimeout(() => {
-                setInterv(interval - 10);
-                setRemainingTime(remainingTime - 10);
-                }, 10);
+                    setInterv(interval - 10)
+                    setRemainingTime(remainingTime - 10)
+                }, 10)
             }
     
             if (round - 1 > 0 && count === 0 && interval === 0) {
-                setRound(round - 1);
-                setCount(props.startVal);
-                setInterv(props.intervalStartVal);
+                setRound(round - 1)
+                setCount(props.startVal)
+                setInterv(props.intervalStartVal)
             }
     
             if (round === 1 && count === 0 && interval === 0) {
-                dispatcher(posRef);
+                dispatcher(posRef)
             }
         }
     
         return () => {
             if (time) {
-                clearTimeout(time);
+                clearTimeout(time)
             }
-        };
-    }, [round, count, interval, isPaused, isStopped]);
+        }
+    }, [round, count, interval, isPaused, isStopped])
     
+    let intervalTime = interval ? interval : 0
     return (
-        <div className="main-panel" ref={posRef}>
+        <div ref={posRef}>
+            <h4>Work 🏋🏼</h4>
             <TimePanel time={count} />
-            <TimePanel time={interval} />
+            <h4>Rest 🧘🏼</h4>
+            <TimePanel time={intervalTime} />
             <RoundPanel round={round} />
         </div>
-    );
+    )
 }

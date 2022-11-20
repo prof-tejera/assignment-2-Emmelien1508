@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react"
+import { useState, createContext } from "react"
 
 export const TimerContext = createContext({})
 
@@ -39,7 +39,7 @@ export default function TimerData({ children }) {
 
             setActiveTimerIndex(activeTimerIndex + 1)
                 posRef.current.scrollIntoView({ behavior: "smooth" })
-            } else {
+        } else {
             const newTimers = timers.map((timer, i) => {
                 return { ...timer, isRunning: false, isCompleted: false }
             })

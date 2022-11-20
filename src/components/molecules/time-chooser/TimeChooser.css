@@ -1,28 +1,27 @@
-.timechooser-panel {
-    text-align: center;
-    height: 30vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.timer-chooser-buttons > div { 
+    margin-bottom: 15px;
 }
 
-.time-buttons {
+.time-chooser {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    align-items: center;
 }
 
-.time-buttons > div {
-    align-items: center;
-    background-color: var(--color-gray2);
-    border-radius: 40px;
+.time-chooser-title {
+    text-align: center;
+}
+
+.time-chooser > * {
+    width: 30px;
+    text-align: center;
+    height: 30px;
+}
+
+.time-chooser-value {
     display: flex;
-    flex-flow: column nowrap;
     justify-content: center;
-}
-
-.time-buttons > p {
-    margin: 0 3px;
-    font-size: var(--size-lg);
+    align-items: center;
+    border-top: 1px solid var(--color-gray3);
+    border-bottom: 1px solid var(--color-gray3);
 }

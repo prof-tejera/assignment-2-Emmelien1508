@@ -50,7 +50,7 @@ function InnerCountdown(props) {
     }, [count, isPaused, isStopped]);
 
     return (
-        <div className="main-panel" ref={posRef}>
+        <div className="countdown" ref={posRef}>
             <TimePanel time={count} />
         </div>
     )

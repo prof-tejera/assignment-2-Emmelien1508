@@ -1,15 +1,15 @@
-import { useNavigate, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useContext, useEffect, useRef } from "react"
 import { TimerContext } from "../../../context/TimerContext"
 import { workoutIsDone, calculateWorkoutTime, getTotalFastForwardTime } from "../../../utils/helpers"
 import Button from "../../atoms/button/Button"
 import TimePanel from "../../molecules/time-panel/TimePanel"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 import './Workout.css'
 
 export default function Workout() {
-    const navigate = useNavigate()
-
     const {
         count,
         setCount,
@@ -51,8 +51,6 @@ export default function Workout() {
             return { ...timer, isRunning: false, isCompleted: false }
         })
         setTimers(newTimers)
-        console.log("these are the new timers")
-        console.log(newTimers)
         setCount(timers[0].startVal)
 
         if (timers[0].title === "XY" || timers[0].title === "Tabata") {
@@ -77,7 +75,6 @@ export default function Workout() {
             })
         setTimers(newTimers)
         setStopped(true)
-        // fix a race condition by setting index out of range
         setActiveTimerIndex(999)
     }
 
@@ -85,61 +82,64 @@ export default function Workout() {
         if (!isStopped) {
             setCount(timers[activeTimerIndex].endVal)
 
-            if (
-                timers[activeTimerIndex].title === "XY" ||
-                timers[activeTimerIndex].title === "Tabata"
-            ) {
+            if (timers[activeTimerIndex].title === "XY" || timers[activeTimerIndex].title === "Tabata") {
                 setRound(timers[activeTimerIndex].roundEndVal)
             }
             if (timers[activeTimerIndex].title === "Tabata") {
-                setInterv(timers[activeTimerIndex].intervalEndVal)
+                setInterv(timers[activeTimerIndex].restTimeEndVal)
             }
 
-            setRemainingTime(
-                workoutRunningTime.current -
-                getTotalFastForwardTime(timers, activeTimerIndex)
-            )
+            setRemainingTime(workoutRunningTime.current - getTotalFastForwardTime(timers, activeTimerIndex))
         }
     }
 
     return (
-        <div className="workout">
+        <div className="workout-container">
+
             {timers.length > 0 && (
-                <div className="main-wrap">
-                    <div className="workout-buttons">
-                        {isStopped && <Button classes="start" onClick={() => handleStart()}>Start</Button>}
-                        {!isStopped && <Button classes="pause" onClick={() => handlePause()}>{pauseLabel}</Button>}
-                        <Button classes="start" disabled={isStopped} onClick={() => handleReset()}>Reset</Button>
-                        <Button classes="start" disabled={isStopped} onClick={() => handleFastForward()}>Fast Forward</Button>
+                <div className="workout-control-buttons">
+                    <div>
+                        {isStopped && <Button classes="tertiary" onClick={() => handleStart()}>Start</Button>}
+                        {!isStopped && <Button classes="secondary" onClick={() => handlePause()}>{pauseLabel}</Button>}
+                        <Button classes="secondary" disabled={isStopped} onClick={() => handleReset()}>Reset</Button>
+                        <Button classes="secondary" disabled={isStopped} onClick={() => handleFastForward()}>Fast Forward</Button>
                     </div>
                 </div>
             )}
-            <Button onClick={() => navigate("/docs")} label="Documentation" />
-            {timers.length > 0 && isStopped && <Button classes="start" onClick={() => navigate("/add")}>Add timer</Button>}
+
             {timers.length > 0 && isStopped && !workoutIsFinished && (
-                <span className="time-total">
-                    <h2>Total time</h2>
+                <div className="total-workout-time">
+                    <h3>Total time</h3>
                     <TimePanel time={calculateWorkoutTime(timers)} />
-                </span>
+                </div>
             )}
+
             {timers.length > 0 && (!isStopped || workoutIsFinished) && (
-                <span className="time-remaining">
-                    <h2>Time remaining</h2>
+                <div className="remaining-workout-time">
+                    <h3>Time remaining</h3>
                     <TimePanel time={workoutIsFinished ? 0 : remainingTime}/>
-                </span>
+                </div>
             )}
-            <div>
+
+            <div className="workout-items">
                 {timers.length === 0 && (
-                    <div className="empty-state">
-                        <h2>No workout configured</h2>
-                        <p>Please <Link to="/add">add one or more timers</Link> to get started</p>
+                    <div className="no-workout">
+                        <h2>You've not chosen your workout yet! 🏋🏼</h2>
+                        <Link to="/add">
+                            <Button classes="primary">Add timer</Button>
+                        </Link>
                     </div>
                 )}
+
                 {timers.map((timerData, index) => (
-                    <div className={"timer-wrapper " + (index === activeTimerIndex && (!isStopped || workoutIsFinished) ? "active" : "")} key={`wrap-${timerData.title}-${index}`}>
-                        {isStopped && <Button classes="pause" key={`delete-${timerData.title}-${index}`} onClick={() => removeTimer(index)}>X</Button>}
-                        <div className="timer" key={`timer-${timerData.title}-${index}`}>
-                            <h2>{timerData.title}</h2>
+                    <div className={"timer " + (index === activeTimerIndex && (!isStopped || workoutIsFinished) ? "active" : "")} key={`timer-${timerData.title}-${index}`}>
+                        {
+                            isStopped && <Button classes="delete extra-small round" key={`delete-${timerData.title}-${index}`} onClick={() => removeTimer(index)}>
+                                <FontAwesomeIcon icon={faTrashCan} size="xs" />    
+                            </Button>
+                        }
+                        <div className="timer-content" key={`timer-component-${timerData.title}-${index}`}>
+                            <h3>{timerData.title}</h3>
                             <timerData.component {...timerData} isRunning={index === activeTimerIndex} />
                         </div>
                     </div>

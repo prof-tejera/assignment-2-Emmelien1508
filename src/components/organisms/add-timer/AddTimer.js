@@ -19,25 +19,25 @@ export default function AddTimer() {
     const navigate = useNavigate();
     const { timers, setTimers } = useContext(TimerContext);
   
-    const [intervalMinutes, setIntervalMinutes] = useState(0);
-    const [intervalSeconds, setIntervalSeconds] = useState(0);
-    const [minutes, setMinutes] = useState(0);
-    const [rounds, setRounds] = useState(1);
-    const [seconds, setSeconds] = useState(0);
     const [type, setType] = useState("");
-  
+    const [rounds, setRounds] = useState(1);
+    const [intervalMinutes, setIntervalMinutes] = useState(0);
+    const [intervalSeconds, setIntervalSeconds] = useState(30);
+    const [minutes, setMinutes] = useState(1);
+    const [seconds, setSeconds] = useState(0);
+
     const data = {
-      minutesLabel: "Minutes",
-      secondsLabel: "Seconds",
-      minutes,
-      seconds,
-      setMinutes,
-      setSeconds,
+        minutesLabel: "Minutes",
+        secondsLabel: "Seconds",
+        minutes,
+        seconds,
+        setMinutes,
+        setSeconds,
     }
 
     const intervalData = {
-        minutesLabel: "Interval Minutes",
-        secondsLabel: "Interval Seconds",
+        minutesLabel: "Rest minutes",
+        secondsLabel: "Rest seconds",
         minutes: intervalMinutes,
         seconds: intervalSeconds,
         setMinutes: setIntervalMinutes,
@@ -92,28 +92,30 @@ export default function AddTimer() {
     
         // reset values
         setType("")
-        setIntervalMinutes(0)
-        setIntervalSeconds(0)
-        setMinutes(0)
-        setMinutes(0)
         setRounds(1)
-        setSeconds(0)
+        setIntervalMinutes(0)
+        setIntervalSeconds(30)
+        setMinutes(1)
         setSeconds(0)
     }
 
-    let setters 
+    let timerChooser 
     if (type === "Stopwatch" || type === "Countdown") {
-        setters = <div className="chooser-panel"><TimeChooser {...data} /></div>
+        timerChooser = (
+            <div>
+                <TimeChooser {...data} />
+            </div>
+        )
     } else if (type === "XY") {
-        setters = (
-            <div className="chooser-panel">
+        timerChooser = (
+            <div>
                 <TimeChooser {...data} />
                 <RoundChooser rounds={rounds} setRounds={setRounds}/>
             </div>
         )
     } else {
-        setters = (
-            <div className="chooser-panel">
+        timerChooser = (
+            <div>
                 <TimeChooser {...data} />
                 <TimeChooser {...intervalData} />
                 <RoundChooser rounds={rounds} setRounds={setRounds}/>
@@ -122,22 +124,29 @@ export default function AddTimer() {
     }
 
     return (
-        <div className="add-timer">
-            <h1>Add a Timer</h1>
-            <span className="type-label">Choose type:</span>
-            <select value={type} onChange={(e) => {setType(e.target.value)}}>
-                <option value="">--</option>
-                <option value="Countdown">Countdown</option>
-                <option value="Stopwatch">Stopwatch</option>
-                <option value="XY">XY</option>
-                <option value="Tabata">Tabata</option>
-            </select>
-            {type && <div className="setter-container">{setters}</div>}
-            {type && <Button classes="pause" onClick={addTimer}>Add Timer</Button>}
+        <div className="add-timer-container">
+            <div className="add-timer-header">
+                <h2>Choose a timer for your workout</h2>
+                <p className="text-xs">Which timer do you want?</p>
+                <select value={type} onChange={(e) => {setType(e.target.value)}}>
+                    <option value="">--</option>
+                    <option value="Countdown">Countdown</option>
+                    <option value="Stopwatch">Stopwatch</option>
+                    <option value="XY">XY</option>
+                    <option value="Tabata">Tabata</option>
+                </select>
+            </div>
 
-            <div className="back-buttons">
-                <Button classes="pause" onClick={() => navigate("/")}>To home</Button>
-                <Button classes="pause" onClick={() => navigate("/docs")}>To docs</Button>
+            {type && (
+                <div className="add-timer-body">
+                    <div className="timer-chooser">{timerChooser}</div>
+                    <Button classes="tertiary" onClick={addTimer}>Add Timer</Button>
+                </div>
+            )}
+
+            <div className="add-timer-buttons">
+                <Button classes="primary" onClick={() => navigate("/")}>To workout</Button>
+                <Button classes="secondary" onClick={() => navigate("/docs")}>To docs</Button>
             </div>
         </div>
     )

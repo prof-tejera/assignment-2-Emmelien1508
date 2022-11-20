@@ -52,7 +52,7 @@ function InnerStopwatch(props) {
     }, [count, props.endVal, isPaused, isStopped])
 
     return (
-        <div className="main-panel" ref={posRef}>
+        <div className="stopwatch" ref={posRef}>
             <TimePanel time={count} />
         </div>
     )

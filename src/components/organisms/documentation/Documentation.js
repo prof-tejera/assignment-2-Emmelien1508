@@ -1,5 +1,4 @@
 import Button from '../../atoms/button/Button'
-import ControlButtons from '../../molecules/control-buttons/ControlButtons'
 import RoundChooser from '../../molecules/round-chooser/RoundChooser'
 import TimeChooser from '../../molecules/time-chooser/TimeChooser'
 import TimePanel from '../../molecules/time-panel/TimePanel'
@@ -8,6 +7,13 @@ import './Documentation.css'
 
 
 export default function Documentation(props) {
+    const data = {
+        minutesLabel: "Minutes",
+        secondsLabel: "Seconds",
+        minutes: 1,
+        seconds: 0,
+    }
+
     return (
         <div className='documentation'>
             <div className="documentation-introduction">
@@ -30,17 +36,19 @@ export default function Documentation(props) {
                 <table>
                     <thead>
                         <tr className='dark-border'>
-                            <th>Component</th>
+                            <th>Title</th>
                             <th>Description</th>
-                            <th>The thing</th>
+                            <th>Component</th>
                         </tr>
                     </thead>
                     <tbody> 
                         <tr>
                             <td>Button</td>
-                            <td>This is a button</td>
+                            <td>This button has classes and onClick properties, which are passed from a parent component. The classes are generic, such as primary, secondary and tertiary.</td>
                             <td>
-                                <Button classes='small start'>Start</Button>
+                                <Button classes='small primary'>Primary</Button>
+                                <Button classes='small secondary'>Secondary</Button>
+                                <Button classes='small tertiary'>Tertiary</Button>
                             </td>
                         </tr>
                     </tbody>
@@ -51,39 +59,31 @@ export default function Documentation(props) {
                 <table>
                     <thead>
                         <tr className='dark-border'>
-                            <th>Component</th>
+                            <th>Title</th>
                             <th>Description</th>
-                            <th>The thing</th>
+                            <th>Component</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr className='light-border'>
-                            <td>Control Buttons</td>
-                            <td>These buttons are used to control the timer</td>
-                            <td>
-                                <ControlButtons/>
-                            </td>
-                        </tr>
-
-                        <tr className='light-border'>
                             <td>Round Chooser</td>
                             <td>This element is used to choose the number of rounds</td>
                             <td>
-                                <RoundChooser totalRounds="5"/>
+                                <RoundChooser rounds="5"/>
                             </td>
                         </tr>
 
                         <tr className='light-border'>
                             <td>Time Chooser</td>
-                            <td>This element is used to choose the time for the countdown</td>
+                            <td>This element is used to choose the time for the countdown. You can click on the increment or decrement buttons and based on that the time increments or decrements, if possible.</td>
                             <td>
-                                <TimeChooser minutes={1} seconds={0}/>
+                                <TimeChooser {...data} />
                             </td>
                         </tr>
 
                         <tr>
                             <td>Time Panel</td>
-                            <td>This element is used for the display of how much time is left</td>
+                            <td>This element is used for the display of how much time is left. During the count down or up, the red digits are miliseconds so they decrement/increment much more faster.</td>
                             <td>
                                 <TimePanel time={60000}/>
                             </td>

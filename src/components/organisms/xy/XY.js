@@ -69,9 +69,13 @@ function InnerXY(props) {
     }, [round, count, isPaused, isStopped]);
     
     return (
-        <div className="main-panel" ref={posRef}>
+        <div className="xy" ref={posRef}>
+            {
+                !isStopped && !isPaused && (
+                    <RoundPanel round={round} />
+                )
+            }
             <TimePanel time={count} />
-            <RoundPanel round={round} />
         </div>
     );
 }
