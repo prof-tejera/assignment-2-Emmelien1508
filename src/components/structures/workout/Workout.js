@@ -1,21 +1,21 @@
-import { Link } from "react-router-dom"
 import { useContext, useEffect, useRef } from "react"
-import { TimerContext } from "../../../context/TimerContext"
-import { workoutIsDone, calculateWorkoutTime, getTotalFastForwardTime } from "../../../utils/helpers"
+import { Link } from "react-router-dom"
+
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import Button from "../../atoms/button/Button"
 import TimePanel from "../../molecules/time-panel/TimePanel"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+
+import { TimerContext } from "../../../context/TimerContext"
+import { workoutIsDone, calculateWorkoutTime, getTotalFastForwardTime } from "../../../utils/helpers"
 
 import './Workout.css'
 
 export default function Workout() {
     const {
-        count,
         setCount,
-        round,
         setRound,
-        interval,
         setInterv,
         isPaused,
         setPaused,
