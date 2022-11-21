@@ -14,6 +14,7 @@ The choice of data structure should be a queue, which follows First-In-First-Out
 2. During configuration, the user can remove any timer from the queue, so you will be supporting deleting
 3. While the timer is running, you will need to either store or dynamically calculate which timer is active. 
 4. You don't want to clear the configurations as the timers are running. The user should be able to restart the entire workout at anytime
+5. URL: https://prof-tejera.github.io/assignment-2-Emmelien1508/
 
 ## Changes to Routing
 
